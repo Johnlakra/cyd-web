@@ -6,8 +6,11 @@ import { z } from "zod";
 //   app.use('/anubhav', anubhavRoutes)               // authenticated
 //   app.use('/auth', authRoutes)                      // POST /auth/login
 // Every response is the envelope: { success, message, data }.
-export const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE ?? "https://cyd-id-be.onrender.com";
+// Trailing slash is stripped so `${API_BASE}/anubhav/...` never doubles up the
+// slash (e.g. a local "http://localhost:3000/" + "/anubhav" would 404).
+export const API_BASE = (
+  process.env.NEXT_PUBLIC_API_BASE ?? "https://cyd-id-be.onrender.com"
+).replace(/\/+$/, "");
 
 // The three retreat places (middleware/anubhavRole.js PLACES). Some public
 // endpoints (timetable) REQUIRE ?place=, so the frontend iterates these.
@@ -29,6 +32,47 @@ export function formatTime(t?: string | null): string {
 // Timetable `day` arrives as an integer 1..3 (dateToDay) or a date string.
 export const dayLabel = (day: number | string): string =>
   typeof day === "number" ? `Day ${day}` : String(day);
+
+const MONTHS_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+// ["2026-06-02","2026-06-03","2026-06-04"] -> "Jun 2–4". Collapses a same-month
+// range to one label; falls back gracefully on empty/odd input.
+export function formatDateRangeShort(dates: string[]): string {
+  const valid = dates
+    .map((d) => new Date(d))
+    .filter((d) => !Number.isNaN(d.getTime()))
+    .sort((a, b) => a.getTime() - b.getTime());
+  if (valid.length === 0) return "Dates TBA";
+  const first = valid[0];
+  const last = valid[valid.length - 1];
+  const m1 = MONTHS_SHORT[first.getMonth()];
+  if (valid.length === 1) return `${m1} ${first.getDate()}`;
+  if (first.getMonth() === last.getMonth()) return `${m1} ${first.getDate()}–${last.getDate()}`;
+  return `${m1} ${first.getDate()} – ${MONTHS_SHORT[last.getMonth()]} ${last.getDate()}`;
+}
+
+// ISO timestamp -> "28 May 2026".
+export function formatPostedDate(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return `${d.getDate()} ${MONTHS_SHORT[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+// ISO timestamp -> "2 days ago" / "Just now" relative to now.
+export function relativeAgo(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  const diffMs = Date.now() - d.getTime();
+  const mins = Math.round(diffMs / 60000);
+  if (mins < 1) return "Just now";
+  if (mins < 60) return `${mins} minute${mins === 1 ? "" : "s"} ago`;
+  const hours = Math.round(mins / 60);
+  if (hours < 24) return `${hours} hour${hours === 1 ? "" : "s"} ago`;
+  const days = Math.round(hours / 24);
+  if (days < 30) return `${days} day${days === 1 ? "" : "s"} ago`;
+  const months = Math.round(days / 30);
+  return `${months} month${months === 1 ? "" : "s"} ago`;
+}
 
 async function getJson(path: string, revalidate: number): Promise<unknown> {
   const res = await fetch(`${API_BASE}${path}`, { next: { revalidate } });
