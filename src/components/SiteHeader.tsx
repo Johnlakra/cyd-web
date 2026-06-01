@@ -8,7 +8,9 @@ import { NAV } from "@/lib/site";
 
 // Sticky top nav. Transparent at the top of the page, frosts on scroll.
 // Desktop: inline links + gold active underline. Mobile: a slide-down menu.
-export function SiteHeader() {
+// `authed` is read server-side from the httpOnly JWT cookie (see layout.tsx)
+// and decides whether the CTA reads "Log in" or "My Profile".
+export function SiteHeader({ authed }: { authed: boolean }) {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -68,10 +70,10 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-2">
           <Link
-            href="/login"
+            href={authed ? "/me" : "/login"}
             className="cta-primary whitespace-nowrap rounded-full bg-violet px-5 py-2.5 font-sans text-[14.5px] font-semibold text-paper transition-transform duration-300 ease-lumen hover:-translate-y-0.5"
           >
-            Log in
+            {authed ? "My Profile" : "Log in"}
           </Link>
           {/* Mobile menu toggle */}
           <button

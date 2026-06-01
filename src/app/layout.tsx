@@ -3,6 +3,7 @@ import { Spectral, Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { isAuthenticated } from "@/lib/auth";
 
 // Lumen type pairing: Spectral (display serif, personality) + Hanken Grotesk (clean text).
 const spectral = Spectral({
@@ -50,10 +51,14 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // Reading the httpOnly JWT cookie here makes the chrome re-evaluate on every
+  // request, so the header reflects login state and content stays fresh on
+  // refresh while the 7-day session cookie keeps the user logged in.
+  const authed = isAuthenticated();
   return (
     <html lang="en" className={`${spectral.variable} ${hanken.variable}`}>
       <body className="min-h-screen bg-bg font-sans text-ink">
-        <SiteHeader />
+        <SiteHeader authed={authed} />
         <main>{children}</main>
         <SiteFooter />
       </body>
