@@ -125,26 +125,26 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-full items-start justify-center bg-bg px-6 pb-[90px] pt-12">
-      <Reveal>
-        <div className="w-[560px] max-w-full text-center">
+    <div className="flex min-h-full items-start justify-center bg-bg px-4 pb-[90px] pt-10 sm:px-6 sm:pt-12">
+      <Reveal className="w-full max-w-[560px]">
+        <div className="w-full text-center">
           <div className="flex justify-center">
             <Mark size={32} />
           </div>
-          <h1 className="mb-2 mt-[18px] font-serif text-[42px] font-medium tracking-[-0.02em] text-ink">
+          <h1 className="mb-2 mt-[18px] font-serif text-[32px] font-medium tracking-[-0.02em] text-ink sm:text-[42px]">
             Welcome back
           </h1>
-          <p className="mb-[30px] font-sans text-[16.5px] leading-[1.55] text-sub">
+          <p className="mb-[26px] font-sans text-[15px] leading-[1.55] text-sub sm:mb-[30px] sm:text-[16.5px]">
             Two things to log in: your <strong className="text-ink">username</strong> and your{" "}
             <strong className="text-ink">phone number</strong>. We&apos;ll help you find them.
           </p>
 
           <form
             onSubmit={onSubmit}
-            className="rounded-[20px] border border-line bg-paper px-[30px] pb-8 pt-[30px] text-left shadow-[0_18px_50px_rgba(36,27,46,0.06)]"
+            className="rounded-[20px] border border-line bg-paper px-5 pb-7 pt-6 text-left shadow-[0_18px_50px_rgba(36,27,46,0.06)] sm:px-[30px] sm:pb-8 sm:pt-[30px]"
           >
             {/* STEP 1 — USERNAME */}
-            <div className="mb-2.5 flex items-baseline justify-between gap-3">
+            <div className="mb-2.5 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
               <span className="whitespace-nowrap font-sans text-[12px] font-bold uppercase tracking-[0.12em] text-gold">
                 Step 1 · Username
               </span>
@@ -180,7 +180,7 @@ export default function LoginPage() {
                       className={INPUT_CLASS}
                     />
                   </div>
-                  <div className="grid grid-cols-[1fr_1.3fr] gap-3">
+                  <div className="grid grid-cols-1 gap-[14px] sm:grid-cols-[1fr_1.3fr] sm:gap-3">
                     <div>
                       <label className="mb-[7px] block font-sans text-[13px] font-bold tracking-[0.01em] text-ink">
                         Birth day
@@ -219,8 +219,8 @@ export default function LoginPage() {
                 </div>
 
                 {/* live formula */}
-                <div className="rounded-[14px] border border-dashed border-line bg-bg px-4 pb-4 pt-[18px]">
-                  <div className="flex flex-wrap items-center justify-center gap-2.5">
+                <div className="rounded-[14px] border border-dashed border-line bg-bg px-3 pb-4 pt-[18px] sm:px-4">
+                  <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-2.5 sm:gap-2.5">
                     <Chip tint={NAME_TINT} sub="name" filled={!!lettersPadded}>
                       {lettersPadded || "john"}
                     </Chip>
