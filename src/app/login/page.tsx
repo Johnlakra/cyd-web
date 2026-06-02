@@ -129,7 +129,7 @@ export default function LoginPage() {
       <Reveal className="w-full max-w-[560px]">
         <div className="w-full text-center">
           <div className="flex justify-center">
-            <Mark size={32} />
+            <Mark size={64} />
           </div>
           <h1 className="mb-2 mt-[18px] font-serif text-[32px] font-medium tracking-[-0.02em] text-ink sm:text-[42px]">
             Welcome back

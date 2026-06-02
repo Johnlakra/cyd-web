@@ -10,7 +10,7 @@ export function SiteFooter() {
         <div className="grid gap-10 border-b border-white/15 pb-12 md:grid-cols-[1.4fr_1fr_1fr]">
           <div>
             <div className="mb-4 flex items-center gap-2.5">
-              <Mark size={26} color="#fff" gold="#C99A3F" />
+              <Mark size={30} />
               <span className="font-serif text-[26px] font-semibold text-white">
                 Anubhav<span className="text-goldSoft">.</span>
               </span>

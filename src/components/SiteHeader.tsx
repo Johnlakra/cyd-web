@@ -38,7 +38,7 @@ export function SiteHeader({ authed }: { authed: boolean }) {
     >
       <div className="mx-auto flex max-w-site items-center justify-between px-5 py-3.5 sm:px-8 md:px-12">
         <Link href="/" className="flex items-center gap-2.5" aria-label="Anubhav 2026 home">
-          <Mark size={24} />
+          <Mark size={32} />
           <span className="font-serif text-[22px] font-semibold tracking-[-0.01em] text-ink sm:text-[23px]">
             Anubhav<span className="text-gold">.</span>
           </span>
