@@ -65,9 +65,6 @@ export default async function StatsPage() {
                 <div className="font-serif text-2xl italic text-[#D5C7EB] sm:text-[28px]">
                   and counting
                 </div>
-                <div className="mt-2 font-sans text-[15px] text-[#B6A8CC]">
-                  Registered at {SITE.fee} per youth
-                </div>
               </div>
             </div>
           </div>
