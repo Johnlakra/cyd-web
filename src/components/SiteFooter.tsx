@@ -42,11 +42,17 @@ export function SiteFooter() {
               Contact
             </div>
             <div className="flex flex-col gap-3 font-sans text-[15px] text-[#D9CFE8]">
-              <span>{SITE.org}</span>
-              <span>{SITE.commission}</span>
+              <span>{SITE.commission}, {SITE.org}</span>
+              <span>{SITE.address}</span>
+              <a href={`tel:${SITE.phoneHref}`} className="transition-colors hover:text-white">
+                {SITE.phone}
+              </a>
               <a href={`mailto:${SITE.email}`} className="transition-colors hover:text-white">
                 {SITE.email}
               </a>
+              <span className="mt-1 text-[#B6A8CC]">
+                {SITE.director} · {SITE.directorTitle}
+              </span>
             </div>
           </div>
         </div>

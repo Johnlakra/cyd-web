@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { formatTime, type TimetableItem } from "@/lib/api";
+import { KIND_COLOR, KIND_LABEL, inferKind, groupByDay } from "@/lib/schedule";
 import { Reveal } from "./Reveal";
 
 export type TimetablePlace = {
@@ -10,54 +11,6 @@ export type TimetablePlace = {
   dateShort: string;
   venue: string;
 };
-
-// Color/label system for the schedule dots + legend. `kind` is inferred from the
-// item title since the public timetable API carries no explicit category.
-const KIND_COLOR: Record<string, string> = {
-  arrival: "#B0822B",
-  worship: "#5A3E8C",
-  talk: "#241B2E",
-  meal: "#9A8E7C",
-  social: "#C99A3F",
-  prayer: "#5A3E8C",
-  mass: "#B0822B",
-};
-const KIND_LABEL: Record<string, string> = {
-  arrival: "Arrival",
-  worship: "Worship",
-  talk: "Session",
-  meal: "Meal",
-  social: "Gathering",
-  prayer: "Prayer",
-  mass: "Holy Mass",
-};
-
-function inferKind(title: string): string {
-  const t = title.toLowerCase();
-  if (/\bmass\b/.test(t)) return "mass";
-  if (/prayer|adoration|confession|rosary/.test(t)) return "prayer";
-  if (/praise|worship/.test(t)) return "worship";
-  if (/breakfast|lunch|dinner|meal|\btea\b|snack/.test(t)) return "meal";
-  if (/arriv|registration|departure|check-?in/.test(t)) return "arrival";
-  if (/session|talk|keynote|address|reflection|workshop|commission|welcome/.test(t)) return "talk";
-  return "social";
-}
-
-// Group a place's items by `day`, preserving day order and sorting by start time.
-function groupByDay(items: TimetableItem[]): { day: number | string; items: TimetableItem[] }[] {
-  const map = new Map<string, { day: number | string; items: TimetableItem[] }>();
-  for (const item of items) {
-    const key = String(item.day);
-    if (!map.has(key)) map.set(key, { day: item.day, items: [] });
-    map.get(key)!.items.push(item);
-  }
-  const groups = Array.from(map.values());
-  groups.sort((a, b) => String(a.day).localeCompare(String(b.day), undefined, { numeric: true }));
-  for (const g of groups) {
-    g.items.sort((a, b) => (a.start_time ?? "").localeCompare(b.start_time ?? ""));
-  }
-  return groups;
-}
 
 export function TimetableView({
   places,
